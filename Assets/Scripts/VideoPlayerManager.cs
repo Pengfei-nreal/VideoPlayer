@@ -23,51 +23,40 @@ public class VideoPlayerManager : MonoBehaviour
             if (player.GetCurrentState() == MediaPlayerCtrl.MEDIAPLAYER_STATE.PLAYING)
             {
                 player.Stop();
+                mPlayBtn.GetComponentInChildren<Text>().text = "Play";
             }
             else if (player.GetCurrentState() == MediaPlayerCtrl.MEDIAPLAYER_STATE.PAUSED)
             {
                 player.Play();
+                mPlayBtn.GetComponentInChildren<Text>().text = "Pause";
             }
         }));
         mQuitBtn.onClick.AddListener(new UnityEngine.Events.UnityAction(() =>
         {
-
+            player.UnLoad();
         }));
 
         player.OnEnd += OnEnd;
-
-    }
-
-    void OnGUI()
-    {
-        if (GUI.Button(new Rect(50, 50, 100, 100), "Load"))
-        {
-
-        }
-
-        if (GUI.Button(new Rect(50, 200, 100, 100), "Play"))
-        {
-
-        }
-
-        if (GUI.Button(new Rect(50, 350, 100, 100), "stop"))
-        {
-
-        }
-
-        if (GUI.Button(new Rect(50, 500, 100, 100), "pause"))
-        {
-            player.Pause();
-        }
-
-        if (GUI.Button(new Rect(50, 650, 100, 100), "Unload"))
-        {
-            player.UnLoad();
-        }
+        player.OnReady += OnReady;
+        player.OnVideoFirstFrameReady += OnFirstFrameReady;
     }
 
     void OnEnd()
     {
+        Debug.Log("OnEnd!");
+    }
 
+    /// <summary>
+    /// 视频加载完成后启动播放（自动播放模式下不需要此操作）
+    /// </summary>
+    void OnReady()
+    {
+        Debug.Log("OnReady!");
+        player.Play();
+    }
+
+    void OnFirstFrameReady()
+    {
+        Debug.Log("OnFirstFrameReady!");
     }
 }

@@ -1,13 +1,8 @@
-
-
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections;
 using UnityEngine.UI;
-
-
-
 
 public class MediaPlayerCtrl : MonoBehaviour {
 	
@@ -50,11 +45,8 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	#endif
 	#endif
 
-
-	
 	private int m_iAndroidMgrID;
 	private bool m_bIsFirstFrameReady;
-
 
 	public enum MEDIAPLAYER_ERROR
 	{
@@ -88,18 +80,13 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		SCALE_Z_TO_Y	= 5,
 		SCALE_X_TO_Y_2	= 6,
 	}
-	
 	bool m_bFirst = false;
-	
 	public MEDIA_SCALE m_ScaleValue;
 	public GameObject [] m_objResize = null;
 	public bool m_bLoop = false;
 	public bool m_bAutoPlay = true;
 	private bool m_bStop = false;
-
 	public bool m_bInit = false;
-	
-	
 	
 	void Awake(){
 		
@@ -195,7 +182,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		
 	}
 	
-	
 	void OnApplicationQuit()
 	{
 		
@@ -223,20 +209,13 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	
 	void Update()
 	{
-		
 		if( string.IsNullOrEmpty(m_strFileName) )
 		{
 			return;
 		}
 		
-		
 		if(m_bFirst == false)
 		{
-			
-			
-			
-			
-			
 			string strName = m_strFileName.Trim();
 			
 			#if UNITY_IPHONE
@@ -272,12 +251,9 @@ public class MediaPlayerCtrl : MonoBehaviour {
 				Call_Load(strName,0);
 			}
 			
-			
 			#endif
 			Call_SetLooping(m_bLoop);
 			m_bFirst = true;
-			
-			
 		}
 		
 		
@@ -307,8 +283,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 					
 					m_VideoTextureDummy = m_VideoTexture;
 					m_VideoTexture = null;
-					
-					
 				}
 				
 				#if UNITY_ANDROID
@@ -336,40 +310,22 @@ public class MediaPlayerCtrl : MonoBehaviour {
 				
 			}
 			
-			
 			Call_UpdateVideoTexture();
-			
-			
-			
 			m_iCurrentSeekPosition = Call_GetSeekPosition();
-			
-			
-
-
         }
 
 
 
         if (m_CurrentState != Call_GetStatus())
         {
-
             m_CurrentState = Call_GetStatus();
-
-
-
             if (m_CurrentState == MEDIAPLAYER_STATE.READY)
             {
-
                 if (OnReady != null)
                     OnReady();
-
                 if (m_bAutoPlay)
                     Call_Play(0);
-
                 SetVolume(m_fVolume);
-
-
-
             }
             else if (m_CurrentState == MEDIAPLAYER_STATE.END)
             {
@@ -385,10 +341,7 @@ public class MediaPlayerCtrl : MonoBehaviour {
             {
                 OnError((MEDIAPLAYER_ERROR)Call_GetError(), (MEDIAPLAYER_ERROR)Call_GetErrorExtra());
             }
-
         }
-
-
     }
 
     public void Resize()
@@ -511,8 +464,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
         }
     }
 
-
-
     //The error code is the following sites related documents.
     //http://developer.android.com/reference/android/media/MediaPlayer.OnErrorListener.html 
     void OnError(MEDIAPLAYER_ERROR iCode, MEDIAPLAYER_ERROR iCodeExtra)
@@ -565,7 +516,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
             OnVideoError(iCode, iCodeExtra);
         }
     }
-
 
     void OnDestroy()
     {
@@ -635,7 +585,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		
 	}
 	
-	
 	public MEDIAPLAYER_STATE GetCurrentState()
 	{
 		return m_CurrentState;
@@ -688,7 +637,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		if( GetCurrentState() != MEDIAPLAYER_STATE.NOT_READY)
 			UnLoad();
 
-
 		m_bIsFirstFrameReady = false;
 
 		m_bFirst = false;
@@ -699,11 +647,8 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		if( m_bInit == false)
 			return;
 		
-		
 		m_CurrentState = MEDIAPLAYER_STATE.NOT_READY;
 	}
-	
-	
 	
 	public void SetVolume(float fVolume)
 	{
@@ -730,7 +675,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 			Call_SetSeekPosition(iSeek);
 
 	}
-	
 	
 	//Gets the duration of the file.
 	//Returns
@@ -768,17 +712,9 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	public void UnLoad()
 	{
 		m_bCheckFBO = false;
-		#if UNITY_ANDROID
-		
-		//Call_Reset();
-		#endif
 		Call_UnLoad();
-		
 		m_CurrentState = MEDIAPLAYER_STATE.NOT_READY;
-		
 	}
-
-	
 
 	#if !UNITY_EDITOR && !UNITY_STANDALONE
 	#if UNITY_ANDROID
@@ -817,10 +753,7 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		#else
 		GetJavaObject().Call("Destroy");
 		#endif
-		
-		
 	}
-	
 	
 	private void Call_UnLoad()
 	{
@@ -842,8 +775,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		#else
 		GetJavaObject().Call("UnLoad");
 		#endif
-		
-		
 	}
 	
 	private bool Call_Load(string strFileName, int iSeek)
@@ -858,10 +789,7 @@ public class MediaPlayerCtrl : MonoBehaviour {
 			#else
 			GL.IssuePluginEvent(1+ m_iAndroidMgrID * 10 + 7000);
 			#endif
-
-
 			Call_SetNotReady();
-			
 			return true;
 		}
 		else
@@ -889,8 +817,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 			return false;
 		}
 		#endif
-		
-		
 	}
 	
 	private void Call_UpdateVideoTexture()
@@ -925,12 +851,8 @@ public class MediaPlayerCtrl : MonoBehaviour {
 						m_TargetMaterial[i].GetComponent<RawImage>().texture = m_VideoTexture;
 					}
 				}
-				
-				
-				
 			}
 		}
-
 		
 		#if UNITY_5
 		if( SystemInfo.graphicsMultiThreaded == true)
@@ -941,7 +863,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 			GL.IssuePluginEvent(3+ m_iAndroidMgrID * 10 + 7000);
 			#endif
 
-		
 		}
 		else
 		{
@@ -1086,7 +1007,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 		return GetJavaObject().Call<int>("GetErrorExtra");
 	}
 	
-	
 	private void Call_SetUnityActivity()
 	{
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -1126,8 +1046,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	{
 		return (MEDIAPLAYER_STATE)GetJavaObject().Call<int>("GetStatus");
 	}
-	
-	
 	
 	#elif UNITY_IPHONE
 	[DllImport("__Internal")]
@@ -1492,7 +1410,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	#else
 	
 	
-	
 	private void Call_Destroy()
 	{
 		
@@ -1621,8 +1538,6 @@ public class MediaPlayerCtrl : MonoBehaviour {
 	
 #endif // !UNITY_EDITOR
 
-
-
     public IEnumerator DownloadStreamingVideoAndLoad(string strURL)
     {
         strURL = strURL.Trim();
@@ -1704,5 +1619,4 @@ public class MediaPlayerCtrl : MonoBehaviour {
         }
 
     }
-
 }

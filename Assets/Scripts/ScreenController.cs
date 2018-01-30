@@ -114,16 +114,6 @@ public class ScreenController : MonoBehaviour
     private Material panoLeftScreenMaterial = null;
     private Material panoRightScreenMaterial = null;
 
-    //准备画面
-    public Texture movieReadyTexture;
-    //public Texture movie3DReadyTexture;
-    public Texture panoReadyTexture;
-    //public Texture pano3DReadyTexture;
-
-    //视频贴图，也即是显示播放器渲染的画面
-    public Texture moviePlayTexture;
-    public Texture panoPlayTexture;
-
     public GameObject movieScreen;
     public GameObject panoScreen;
     public GameObject Environment;
